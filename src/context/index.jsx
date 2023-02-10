@@ -8,24 +8,29 @@ const StateContext = createContext();
 const web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.testnet.mantle.xyz/'));
 
 export const StateContextProvider = ( {children} ) => {
+    const [blocks, setBlocks] = useState([]);
+    
+    useEffect(() => {
+        getTransactionFromTo();
+    }, [])
     
 
     const getAllTransactions = async () => {
         try {
-            let transactions = [];
+            let trans = [];
             
-            const blocks = await web3.eth.getBlockNumber()
-            for(let i = blocks - 30; i < blocks; i++){
+            const broxk = await web3.eth.getBlockNumber()
+            for(let i = broxk - 30; i < broxk; i++){
                 let info = {};
                 const block = await web3.eth.getBlock(i)
                 let hour = new Date(block.timestamp * 1000).getHours().toString();
                 let minutes = new Date(block.timestamp * 1000).getMinutes().toString();
                 let seconds = new Date(block.timestamp * 1000).getSeconds().toString();
                 info.hour = hour + ":" + minutes + ":" + seconds; 
-                info.count = block.transactions.length;
-                transactions.push(info);
+                info.count = block.trans.length;
+                trans.push(info);
             }
-            return transactions;
+            return trans;
 
         } catch (err) {
             console.log(err)
@@ -34,11 +39,11 @@ export const StateContextProvider = ( {children} ) => {
 
     const getTransactionFromTo = async () => {
         let totalBlocks = await web3.eth.getBlockNumber();
-        let blocks = [];
+        let blockss = [];
         let transactions = [];
         let promises = [];
       
-        for(let i = 0; i < 20; i++){
+        for(let i = 0; i < 3; i++){
             promises.push(new Promise((resolve, reject) => {
             if(i > 0) totalBlocks -= 1000;
             web3.currentProvider.send({
@@ -51,25 +56,30 @@ export const StateContextProvider = ( {children} ) => {
                 reject(err);
               }
               res.result.map((trans) => {
-                  blocks.push(trans)
+                  blockss.push(trans)
                 })
                 resolve();
             });
           }));
         }
-      
+
         await Promise.all(promises);
-        blocks.map((block) => {
+        setBlocks(blockss);
+    };
+    
+    const getTransactionsOverTime = async() => {
+        let transactions = [];
+        const xablau = blocks;
+        console.log('xablau', xablau);
+        xablau.map((block) => {
             let info = {};
             let hour = new Date(block.timestamp * 1000).getHours().toString();
             info.hour = hour + ":00";
             info.count = block.transactions.length;
             transactions.push(info);
         })
-        console.log(transactions)
         return transactions;
-      };
-    
+    }
 
 
 
@@ -78,7 +88,10 @@ export const StateContextProvider = ( {children} ) => {
             value={
                 {
                     getAllTransactions,
-                    getTransactionFromTo
+                    getTransactionFromTo,
+                    getTransactionsOverTime,
+                    blocks,
+
                 }
             }
         >

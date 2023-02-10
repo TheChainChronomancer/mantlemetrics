@@ -1,55 +1,20 @@
 import React, { useEffect } from 'react'
 
-import { LineChart, XAxis, YAxis, ComposedChart, Rectangle, ReferenceArea, ReferenceDot, ReferenceLine, Brush, CartesianGrid, Legend, Tooltip, Line, Customized, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
+import { LineChart, XAxis, YAxis, ComposedChart, Rectangle, Label, ReferenceDot, ReferenceLine, Brush, CartesianGrid, Legend, Tooltip, Line, Customized, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 
 
 
 const Chart = ({type, data}) => {
   
 
-
     // const data = [
-    //     {
-    //       "day": "Page A",
-    //       "uv": 4000,
-    //       "pv": 2400,
-    //       "count": 2400
-    //     },
-    //     {
-    //       "day": "Page B",
-    //       "uv": 3000,
-    //       "pv": 1398,
-    //       "count": 2210
-    //     },
-    //     {
-    //       "day": "Page C",
-    //       "uv": 2000,
-    //       "pv": 9800,
-    //       "count": 2290
-    //     },
-    //     {
-    //       "day": "Page D",
-    //       "uv": 2780,
-    //       "pv": 3908,
-    //       "count": 2000
-    //     },
-    //     {
-    //       "day": "Page E",
-    //       "uv": 1890,
-    //       "pv": 4800,
-    //       "count": 2181
-    //     },
-    //     {
-    //       "day": "Page F",
-    //       "uv": 2390,
-    //       "pv": 3800,
-    //       "count": 10
-    //     },
-    //     {
-    //       "day": "Page G",
-    //       "count": 2100
-    //     }
-    //   ]
+    //     {number: 1, transCount: 30},
+    //     {number: 2, transCount: 8},
+    //     {number: 3, transCount: 3},
+    //     {number: 4, transCount: 6},
+    //     {number: 5, transCount: 5},
+    //     {number: 6, transCount: 10},
+    // ]
 
     const colors = [ '#0088FE', '#00C49F', '#FFBB28', '#FF8042' ];
 
@@ -94,7 +59,7 @@ const Chart = ({type, data}) => {
 
     return (
         <div className="p-4 border-4 rounded-lg border-gray-200 shadow-lg sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh]">
-            {type === "line" && (
+            {type === "line" && data && (
                 <ResponsiveContainer>
                     <LineChart data={data && data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -106,17 +71,23 @@ const Chart = ({type, data}) => {
                     </LineChart>
                 </ResponsiveContainer>
             )}
-            {type === "bar" && (
+            {type === "bar" && data && (
                 <ResponsiveContainer>
 
                 <BarChart data={data && data}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey='hour' />
+                    <XAxis dataKey='number' name="">
+                    </XAxis>
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="count" fill="#8884d8" />
-                    <Bar dataKey="count" fill="#82ca9d" />
+                    <Bar dataKey="transCount" name="Block transactions">
+                    {
+                        data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                        ))
+                    }
+                    </Bar>
                 </BarChart>
                 </ResponsiveContainer>
             )}
