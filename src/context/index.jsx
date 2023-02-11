@@ -11,7 +11,7 @@ export const StateContextProvider = ( {children} ) => {
     const [blocks, setBlocks] = useState([]);
     
     useEffect(() => {
-        getTransactionFromTo();
+        getBlocksFromTo();
     }, [])
     
 
@@ -37,13 +37,13 @@ export const StateContextProvider = ( {children} ) => {
         }
     }
 
-    const getTransactionFromTo = async () => {
+    const getBlocksFromTo = async () => {
         let totalBlocks = await web3.eth.getBlockNumber();
         let blockss = [];
         let transactions = [];
         let promises = [];
       
-        for(let i = 0; i < 1; i++){
+        for(let i = 0; i < 3; i++){
             promises.push(new Promise((resolve, reject) => {
             if(i > 0) totalBlocks -= 1000;
             web3.currentProvider.send({
@@ -68,18 +68,7 @@ export const StateContextProvider = ( {children} ) => {
         setBlocks(blockss);
     };
     
-    const getTransactionsOverTime = async() => {
-        let transactions = [];
-        const xablau = blocks;
-        xablau.map((block) => {
-            let info = {};
-            let hour = new Date(block.timestamp * 1000).getHours().toString();
-            info.hour = hour + ":00";
-            info.count = block.transactions.length;
-            transactions.push(info);
-        })
-        return transactions;
-    }
+
 
 
 
@@ -88,8 +77,7 @@ export const StateContextProvider = ( {children} ) => {
             value={
                 {
                     getAllTransactions,
-                    getTransactionFromTo,
-                    getTransactionsOverTime,
+                    getBlocksFromTo,
                     blocks,
 
                 }

@@ -1,20 +1,34 @@
 import React, { useEffect } from 'react'
 
-import { LineChart, XAxis, YAxis, ComposedChart, Rectangle, Label, ReferenceDot, ReferenceLine, Brush, CartesianGrid, Legend, Tooltip, Line, Customized, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
+import { Loader, Heatmap } from './index'
+
+import { LineChart, XAxis, YAxis, AreaChart, Area, ComposedChart, Rectangle, Label, ReferenceDot, ReferenceLine, Brush, CartesianGrid, Legend, Tooltip, Line, Customized, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
+
 
 
 
 const Chart = ({type, data}) => {
   
 
-    // const data = [
-    //     {number: 1, transCount: 30},
-    //     {number: 2, transCount: 8},
-    //     {number: 3, transCount: 3},
-    //     {number: 4, transCount: 6},
-    //     {number: 5, transCount: 5},
-    //     {number: 6, transCount: 10},
-    // ]
+    const dataTest = [
+        {number: 1, transCount: 30},
+        {number: 2, transCount: 8},
+        {number: 3, transCount: 3},
+        {number: 4, transCount: 6},
+        {number: 18, transCount: 5},
+        {number: 19, transCount: 10},
+        {number: 20, transCount: 10},
+        {number: 21, transCount: 10},
+        {number: 22, transCount: 10},
+        {number: 23, transCount: 10},
+        {number: 24, transCount: 10},
+        {number: 25, transCount: 10},
+        {number: 26, transCount: 10},
+        {number: 27, transCount: 10},
+        {number: 28, transCount: 10},
+        {number: 29, transCount: 10},
+        {number: 30, transCount: 10},
+    ]
 
     const colors = [ '#0088FE', '#00C49F', '#FFBB28', '#FF8042' ];
 
@@ -46,22 +60,21 @@ const Chart = ({type, data}) => {
       ];
 
     const datarec = [
-    { day: 'Mon', hour: '1', value: 120 },
-    { day: 'Mon', hour: '2', value: 80 },
-    { day: 'Mon', hour: '3', value: 40 },
-    { day: 'Tue', hour: '4', value: 70 },
-    { day: 'Tue', hour: '5', value: 50 },
-    { day: 'Tue', hour: '6', value: 90 },
-    { day: 'Wed', hour: '7', value: 30 },
-    { day: 'Wed', hour: '8', value: 60 },
-    { day: 'Wed', hour: '9', value: 110 },
+        { x: 1, y: 1, value: 10 },
+        { x: 1, y: 2, value: 5 },
+        { x: 2, y: 1, value: 15 },
+        { x: 2, y: 2, value: 8 },
+        { x: 3, y: 1, value: 20 },
+        { x: 3, y: 2, value: 12 },
     ];
 
+
     return (
-        <div className="p-4 border-4 rounded-lg border-gray-200 shadow-lg sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh]">
+        <div className="p-4 border-4 rounded-lg border-gray-200 shadow-lg sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh] text-[12px] flex">
+            {(!data || data?.length < 1) && ( <Loader /> )}
             {type === "line" && data && data.length > 1 && (
                 <ResponsiveContainer>
-                    <LineChart data={data && data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <LineChart data={data && data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="hour" />
                         <YAxis />
@@ -71,12 +84,34 @@ const Chart = ({type, data}) => {
                     </LineChart>
                 </ResponsiveContainer>
             )}
+            {type === "area" && data && data.length > 1 && (
+                <ResponsiveContainer>
+                    <AreaChart data={data}>
+                        <defs>
+                            <linearGradient id="colorTransactions" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="10%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                                <stop offset="100%" stopColor="#82ca9d" stopOpacity={0}/>
+                            </linearGradient>
+                        </defs>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="number">
+                                <Label value="Last 30 blocks transaction count" offset={0} position="insideBottom" />
+                            </XAxis>
+                            <YAxis allowDecimals={false}>
+                                <Label value="Transaction count" angle={-90} position="center" />
+                            </YAxis>
+                            <Tooltip />
+                            <Legend />
+                            <Area type="monotone" dataKey="transCount" name="Transaction in the last block" stroke="#82ca9d" fillOpacity={1} fill="url(#colorTransactions)" />
+                    </AreaChart>
+                </ResponsiveContainer>
+            )}
             {type === "bar" && data && data.length > 1 && (
                 <ResponsiveContainer>
 
-                <BarChart data={data && data}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey='time' name="">
+                <BarChart data={data && data} >
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis dataKey='time'>
                     </XAxis>
                     <YAxis />
                     <Tooltip />
@@ -91,7 +126,7 @@ const Chart = ({type, data}) => {
                 </BarChart>
                 </ResponsiveContainer>
             )}
-            {type === "pie" && (
+            {type === "pie" && data && data.length > 1 && (
                 <ResponsiveContainer>
                 <PieChart>
                     <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={100} fill="#82ca9d" label>
@@ -106,24 +141,7 @@ const Chart = ({type, data}) => {
                 </ResponsiveContainer>
             )}
             {type === "heatmap" && (
-                <ResponsiveContainer>
-                <ComposedChart data={datarec} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                    <XAxis dataKey="hour" />
-                    <YAxis dataKey="day" />
-                    <Tooltip />
-                    <Legend />
-                    
-                    <Rectangle
-                        name={datarec.value}
-                        dataKey={datarec.value}
-                        fill="#8884d8"
-                        x={0}
-                        y={0}
-                        width={100}
-                        height={100}
-                    />
-                </ComposedChart>
-                </ResponsiveContainer>
+                <Heatmap />
             )}
         </div>
     )

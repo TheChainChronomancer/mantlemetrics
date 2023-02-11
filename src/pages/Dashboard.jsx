@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import { BarChart, Bar, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-import Chart from '../components/Chart'
+import { Chart } from '../components'
+import { Heatmap } from '../components'
 import { useStateContext } from '../context'
 
 const Dashboard = () => {
     
-    const { getAllTransactions, getTransactionFromTo, getTransactionsOverTime, transactionsPerBlock, blocks } = useStateContext();
+    const {  getBlocksFromTo, blocks } = useStateContext();
 
     const [dataGraphLine, setDataGraphLine] = useState(null);
     const [dataGraphBar, setDataGraphBar] = useState(null);
+    const [dataAreaChart, setDataAreaChart] = useState(null);
+
 
 
 
     useEffect(() => {
        dataForLine();
        dataForBar();
+       getTransactionsPerBlock();
     
     }, [blocks])
     
+
+
+    const dataForArea = () =>{
+
+    }
 
     const dataForBar = () => {
         let data = [];
@@ -27,7 +36,7 @@ const Dashboard = () => {
         let olderBlockTime = blocks[0]?.timestamp * 1000;
 
         blocks?.map((block) => {
-            if(olderBlockTime < block.timestamp * 1000 && block.timestamp * 1000 < olderBlockTime + 15 * 60 * 1000){
+            if(olderBlockTime <= block.timestamp * 1000 && block.timestamp * 1000 <= olderBlockTime + 15 * 60 * 1000){
 
                 countBlocks++;
 
@@ -44,6 +53,8 @@ const Dashboard = () => {
                 countBlocks = 0;
                 
                 data.push(info)
+            } else {
+                console.log("block", olderBlockTime, block.timestamp  * 1000, olderBlockTime + 15 * 60 * 1000)
             }
         })
         setDataGraphBar(data);
@@ -73,10 +84,30 @@ const Dashboard = () => {
     }
 
 
+    const getTransactionsPerBlock = () => {
+        if(!blocks || blocks.length < 1)    return;
+        let data = [];
+        for(let i = blocks.length - 30; i < blocks.length; i++)
+        {
+            let info = {};
+            if(blocks.length - i < 10){
+                info.number = "0"+(blocks.length - i).toString();
+            } else {
+                info.number = (blocks.length - i).toString();
+            }
+            info.transCount = blocks[i].transactions.length;
+            //info.transCount = Math.floor(Math.random() * 100);
+            data.push(info);
+        }
+        setDataAreaChart(data);
+    }
+
+
     return (
-        <div className="w-[80%] h-[80%] m-auto mt-10 flex items-center justify-center flex-col sm:flex-row flex-wrap gap-6 ">
+        <div className="m-auto mt-10 flex items-center justify-center flex-col sm:flex-row flex-wrap gap-6 ">
             <Chart type="line" data={dataGraphLine && dataGraphLine}/>
-            <Chart type="bar"data={dataGraphBar && dataGraphBar}/>
+            <Chart type="bar" data={dataGraphBar && dataGraphBar}/>
+            <Chart type="area" data={dataAreaChart && dataAreaChart}/>
             <Chart type="pie"/>
             <Chart type="heatmap"/>
         </div>
