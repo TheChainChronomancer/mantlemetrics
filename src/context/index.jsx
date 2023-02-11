@@ -43,7 +43,7 @@ export const StateContextProvider = ( {children} ) => {
         let transactions = [];
         let promises = [];
       
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < 1; i++){
             promises.push(new Promise((resolve, reject) => {
             if(i > 0) totalBlocks -= 1000;
             web3.currentProvider.send({
@@ -64,13 +64,13 @@ export const StateContextProvider = ( {children} ) => {
         }
 
         await Promise.all(promises);
+        blockss.sort((a, b) => (parseInt(a.timestamp,16) - parseInt(b.timestamp,16)))
         setBlocks(blockss);
     };
     
     const getTransactionsOverTime = async() => {
         let transactions = [];
         const xablau = blocks;
-        console.log('xablau', xablau);
         xablau.map((block) => {
             let info = {};
             let hour = new Date(block.timestamp * 1000).getHours().toString();

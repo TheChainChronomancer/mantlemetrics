@@ -59,7 +59,7 @@ const Chart = ({type, data}) => {
 
     return (
         <div className="p-4 border-4 rounded-lg border-gray-200 shadow-lg sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh]">
-            {type === "line" && data && (
+            {type === "line" && data && data.length > 1 && (
                 <ResponsiveContainer>
                     <LineChart data={data && data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -71,17 +71,17 @@ const Chart = ({type, data}) => {
                     </LineChart>
                 </ResponsiveContainer>
             )}
-            {type === "bar" && data && (
+            {type === "bar" && data && data.length > 1 && (
                 <ResponsiveContainer>
 
                 <BarChart data={data && data}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey='number' name="">
+                    <XAxis dataKey='time' name="">
                     </XAxis>
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="transCount" name="Block transactions">
+                    <Bar dataKey="countBlocks" name="Blocks count">
                     {
                         data.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />

@@ -22,14 +22,31 @@ const Dashboard = () => {
 
     const dataForBar = () => {
         let data = [];
-        blocks.map((block) => {
-            let info = {};
-            info.number = parseInt(block.number.slice(2), 16);
-            info.transCount = block.transactions.length;
-            data.push(info);
+        let countBlocks = 1;
+
+        let olderBlockTime = blocks[0]?.timestamp * 1000;
+
+        blocks?.map((block) => {
+            if(olderBlockTime < block.timestamp * 1000 && block.timestamp * 1000 < olderBlockTime + 15 * 60 * 1000){
+
+                countBlocks++;
+
+            } else if (block.timestamp * 1000 > olderBlockTime + 15 * 60 * 1000){
+                let info = {};
+
+                let time1 = new Date(olderBlockTime).toTimeString().slice(0,5)
+                let time2  = new Date(olderBlockTime + 15 * 60 * 1000).toTimeString().slice(0,5)
+
+                info.countBlocks = countBlocks;
+                info.time = time1 + ' - ' + time2;
+                
+                olderBlockTime = block.timestamp * 1000;
+                countBlocks = 0;
+                
+                data.push(info)
+            }
         })
-        console.log(data);
-        setDataGraphBar(data.slice(0,30));
+        setDataGraphBar(data);
 
     }
 
