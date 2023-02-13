@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { BarChart, Bar, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-import { Chart } from '../components'
+import { Chart, Navbar } from '../components'
 import { useStateContext } from '../context'
+
 
 const Dashboard = () => {
     
@@ -188,15 +188,19 @@ const Dashboard = () => {
 
 
     return (
-        <div className="mx-auto p-10 flex items-center justify-center flex-col sm:flex-row flex-wrap gap-6 bg-[#f5f5f5]">
-            <Chart type="line" data={dataGraphLine && dataGraphLine} title="Transactions mined"/>
-            <Chart type="bar" data={blocksPerPeriodChart && blocksPerPeriodChart} title="Mined blocks"/>
-            <Chart type="area" data={dataAreaChart && dataAreaChart} title="Transactions included in last mined blocks"/>
-            <Chart type="linetransfers" data={transfersPerPeriodChart && transfersPerPeriodChart} title="Transfers made"/>
-            <Chart type="bartransfersvalues" data={transfersValueChart && transfersValueChart} title="Amount total transfers"/>
-            <Chart type="areaTransfersAverage" data={transfersAverageChart && transfersAverageChart} title="Average of amount per transfer"/>
-            {/* <Chart type="composed" data={dataComposedChart && dataComposedChart} title="test chart"/> */}
-        </div>
+        <>
+            <Navbar />
+
+            <div className="mx-auto p-10 flex items-center justify-center flex-col sm:flex-row flex-wrap gap-6 bg-[#f5f5f5]">
+                <Chart type="line" data={dataGraphLine && dataGraphLine} title="Transactions mined"/>
+                <Chart type="bar" data={blocksPerPeriodChart && blocksPerPeriodChart} title="Mined blocks"/>
+                <Chart type="area" data={dataAreaChart && dataAreaChart} title="Transactions included in last mined blocks"/>
+                <Chart type="linetransfers" data={transfersPerPeriodChart && transfersPerPeriodChart} title="Transfers made"/>
+                <Chart type="bartransfersvalues" data={transfersValueChart && transfersValueChart} title="Amount total transfers"/>
+                <Chart type="areaTransfersAverage" data={transfersAverageChart && transfersAverageChart} title="Average of amount per transfer"/>
+                {/* <Chart type="composed" data={dataComposedChart && dataComposedChart} title="test chart"/> */}
+            </div>
+        </>
     )
 }
 

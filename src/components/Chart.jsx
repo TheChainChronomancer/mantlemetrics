@@ -6,7 +6,6 @@ import { LineChart, XAxis, YAxis, AreaChart, Area, ComposedChart, Label, Brush, 
 
 
 
-
 const Chart = ({type, data, title}) => {
   
 
@@ -59,19 +58,11 @@ const Chart = ({type, data, title}) => {
         }
       ];
 
-    const datarec = [
-        { x: 1, y: 1, value: 10 },
-        { x: 1, y: 2, value: 5 },
-        { x: 2, y: 1, value: 15 },
-        { x: 2, y: 2, value: 8 },
-        { x: 3, y: 1, value: 20 },
-        { x: 3, y: 2, value: 12 },
-    ];
 
 
     return (
         <div className="flex flex-col items-center">
-        <h2 className="p-3 font-semibold bg-[#cad6eb] drop-shadow-md sm:w-[35vw] w-[80vw] text-center rounded-t-lg ">{title}</h2>
+        <h2 className="p-2 font-semibold bg-[#cad6eb] drop-shadow-md sm:w-[35vw] w-[80vw] text-center text-gray-600 rounded-t-lg ">{title}</h2>
         <div className="p-4 rounded-b-lg bg-white hover:drop-shadow-xl drop-shadow-md sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh] text-[12px] flex">
             {(!data || data?.length < 1) && ( <Loader /> )}
             {type === "line" && data && data.length > 1 && (
@@ -84,7 +75,7 @@ const Chart = ({type, data, title}) => {
                         </YAxis>
                         <Tooltip />
                         <Legend />
-                        <Line type="monotone" legendType='plainline' dataKey="count" name="Number of transactions" stroke="#8884d8" />
+                        <Line type="monotone" legendType='plainline' dataKey="count" name="Number of transactions" stroke="#8884d8" fill="#1a10e0" />
                         <Brush  dataKey="hour" height={20} />
                     </LineChart>
                 </ResponsiveContainer>
@@ -183,19 +174,13 @@ const Chart = ({type, data, title}) => {
 
                 <ResponsiveContainer>
                 <LineChart data={data && data} >
-                    <defs>
-                            <linearGradient id="colorTransactionsLine" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="10%" stopColor="#82ca9d" stopOpacity={1.0}/>
-                                <stop offset="100%" stopColor="#82ca9d" stopOpacity={0.4}/>
-                            </linearGradient>
-                    </defs>
                     <CartesianGrid strokeDasharray="1 1" />
                     <XAxis dataKey='time'>
                     </XAxis>
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Line type="linear" legendType="plainline" dataKey="transfersCount" name="Transfers count" stroke="#82ca9d" fillOpacity={1} fill="url(#colorTransactionsLine)">
+                    <Line type="linear" legendType="plainline" dataKey="transfersCount" name="Transfers count" stroke="#82ca9d" fill="#22b358">
                     </Line>
                     <Brush  dataKey="time" height={20} />
                 </LineChart>
