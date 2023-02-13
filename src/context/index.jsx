@@ -4,7 +4,6 @@ import Web3 from 'web3';
 
 const StateContext = createContext();
 
-// const web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.testnet.mantle.xyz/'));
 const web3 = new Web3(new Web3.providers.HttpProvider('https://rpc.testnet.mantle.xyz/'));
 
 export const StateContextProvider = ( {children} ) => {
@@ -43,7 +42,7 @@ export const StateContextProvider = ( {children} ) => {
         let transactions = [];
         let promises = [];
       
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < 5; i++){
             promises.push(new Promise((resolve, reject) => {
             if(i > 0) totalBlocks -= 1000;
             web3.currentProvider.send({

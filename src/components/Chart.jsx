@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 
-import { Loader, Heatmap } from './index'
+import { Loader } from './index'
 
-import { LineChart, XAxis, YAxis, AreaChart, Area, ComposedChart, Rectangle, Label, ReferenceDot, ReferenceLine, Brush, CartesianGrid, Legend, Tooltip, Line, Customized, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
-
-
+import { LineChart, XAxis, YAxis, AreaChart, Area, ComposedChart, Label, Brush, CartesianGrid, Legend, Tooltip, Line, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 
 
-const Chart = ({type, data}) => {
+
+
+const Chart = ({type, data, title}) => {
   
 
     const dataTest = [
@@ -30,7 +30,7 @@ const Chart = ({type, data}) => {
         {number: 30, transCount: 10},
     ]
 
-    const colors = [ '#0088FE', '#00C49F', '#FFBB28', '#FF8042' ];
+    const colors = [ '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#19F83E', '#AC2C98', '#FCBA4B', '#403A3A', '#955F20', '#0E294B', '#D53032', '#A03472', '#955F20', '#2E3A23', '#45322E', '#8A9597' ];
 
     const data01 = [
         {
@@ -70,17 +70,22 @@ const Chart = ({type, data}) => {
 
 
     return (
-        <div className="p-4 border-4 rounded-lg border-gray-200 shadow-lg sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh] text-[12px] flex">
+        <div className="flex flex-col items-center">
+        <h2 className="p-3 font-semibold bg-[#cad6eb] drop-shadow-md sm:w-[35vw] w-[80vw] text-center rounded-t-lg ">{title}</h2>
+        <div className="p-4 rounded-b-lg bg-white hover:drop-shadow-xl drop-shadow-md sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh] text-[12px] flex">
             {(!data || data?.length < 1) && ( <Loader /> )}
             {type === "line" && data && data.length > 1 && (
                 <ResponsiveContainer>
                     <LineChart data={data && data}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="hour" />
-                        <YAxis />
+                        <CartesianGrid strokeDasharray="1 1" />
+                        <XAxis dataKey="hour">
+                        </XAxis>
+                        <YAxis>
+                        </YAxis>
                         <Tooltip />
                         <Legend />
-                        <Line type="monotone" dataKey="count" name="Number of transactions" stroke="#8884d8" />
+                        <Line type="monotone" legendType='plainline' dataKey="count" name="Number of transactions" stroke="#8884d8" />
+                        <Brush  dataKey="hour" height={20} />
                     </LineChart>
                 </ResponsiveContainer>
             )}
@@ -93,16 +98,15 @@ const Chart = ({type, data}) => {
                                 <stop offset="100%" stopColor="#82ca9d" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
-                            <CartesianGrid strokeDasharray="3 3" />
+                            <CartesianGrid strokeDasharray="1 1" />
                             <XAxis dataKey="number">
-                                <Label value="Last 30 blocks transaction count" offset={0} position="insideBottom" />
                             </XAxis>
                             <YAxis allowDecimals={false}>
-                                <Label value="Transaction count" angle={-90} position="center" />
                             </YAxis>
                             <Tooltip />
                             <Legend />
-                            <Area type="monotone" dataKey="transCount" name="Transaction in the last block" stroke="#82ca9d" fillOpacity={1} fill="url(#colorTransactions)" />
+                            <Area type="monotone" legendType="plainline" dataKey="transCount" name="Transaction in the last block" stroke="#82ca9d" fillOpacity={1} fill="url(#colorTransactions)" />
+                            <Brush  dataKey="number" height={20} />
                     </AreaChart>
                 </ResponsiveContainer>
             )}
@@ -116,19 +120,93 @@ const Chart = ({type, data}) => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="countBlocks" name="Blocks count">
+                    <Bar dataKey="countBlocks" name="Blocks count" legendType='plainline'>
                     {
                         data.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                         ))
                     }
                     </Bar>
+                    <Brush  dataKey="time" height={20} />
                 </BarChart>
                 </ResponsiveContainer>
             )}
-            {type === "pie" && data && data.length > 1 && (
+            {type === "bartransfersvalues" && data && data.length > 1 && (
+                <ResponsiveContainer>
+
+                <BarChart data={data && data} >
+
+                    <defs>
+                            <linearGradient id="colorValueBar" x1="0" y1="1" x2="0" y2="0">
+                                <stop offset="40%" stopColor="#ffa500" stopOpacity={0.4}/>
+                                <stop offset="100%" stopColor="#ffa500" stopOpacity={1.0}/>
+                            </linearGradient>
+                    </defs>
+
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis dataKey='time'>
+                    </XAxis>
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar type="linear" legendType="rect" dataKey="transfersValue" name="Transfers value" stroke="#ffa500" fillOpacity={1} fill="url(#colorValueBar)">
+                    </Bar>
+                    <Brush  dataKey="time" height={20} />
+                </BarChart>
+                </ResponsiveContainer>
+            )}
+            {type === "areaTransfersAverage" && data && data.length > 1 && (
+                <ResponsiveContainer>
+
+                <AreaChart data={data && data} >
+
+                    <defs>
+                            <linearGradient id="colorAverageBar" x1="0" y1="1" x2="0" y2="0">
+                                <stop offset="40%" stopColor="#ed3419" stopOpacity={0.4}/>
+                                <stop offset="100%" stopColor="#ed3419" stopOpacity={1.0}/>
+                            </linearGradient>
+                    </defs>
+
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis dataKey='time'>
+                    </XAxis>
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Area type="monotone" legendType="rect" dataKey="transfersAverage" name="Average value/transaction" stroke="#ed3419" fillOpacity={1} fill="url(#colorAverageBar)">
+                    </Area>
+                    <Brush  dataKey="time" height={20} />
+                </AreaChart>
+                </ResponsiveContainer>
+            )}
+            {type === "linetransfers" && data && data.length > 1 && (
+
+                <ResponsiveContainer>
+                <LineChart data={data && data} >
+                    <defs>
+                            <linearGradient id="colorTransactionsLine" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="10%" stopColor="#82ca9d" stopOpacity={1.0}/>
+                                <stop offset="100%" stopColor="#82ca9d" stopOpacity={0.4}/>
+                            </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis dataKey='time'>
+                    </XAxis>
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="linear" legendType="plainline" dataKey="transfersCount" name="Transfers count" stroke="#82ca9d" fillOpacity={1} fill="url(#colorTransactionsLine)">
+                    </Line>
+                    <Brush  dataKey="time" height={20} />
+                </LineChart>
+                </ResponsiveContainer>
+
+            )}
+            {type === "pie" && (
                 <ResponsiveContainer>
                 <PieChart>
+                    <Tooltip />
+                    <Legend />
                     <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={100} fill="#82ca9d" label>
                     {
                         data01.map((entry, index) => (
@@ -140,9 +218,25 @@ const Chart = ({type, data}) => {
 
                 </ResponsiveContainer>
             )}
-            {type === "heatmap" && (
-                <Heatmap />
-            )}
+            {type === "composed" && data?.length > 1 && (
+                <ResponsiveContainer>
+                    <ComposedChart data={data}>
+                        <XAxis dataKey="number" />
+                        <YAxis allowDecimals={false}/>
+                        <Tooltip />
+                        <Legend />
+                        <CartesianGrid stroke="#f5f5f5" />
+                        <Bar dataKey="difficulty" name="Block difficulty" fill="#820263" />
+                        <Line type="monotone" legendType ="plainline" name="Total value transferred" dataKey="sumValues" fill="#fb8b24" stroke="#fb8b24" />
+                        <Line type="monotone" legendType="rect" name="Transactions included" dataKey="transCount" fill="#05f4ad" stroke="#05f4ad" />
+                        <Brush  dataKey="number" height={20} startIndex={10} endIndex={1} />
+                    </ComposedChart>
+                    <Brush  dataKey="number" height={20} />
+                </ResponsiveContainer>
+            )
+            }
+        </div>
+
         </div>
     )
 }
