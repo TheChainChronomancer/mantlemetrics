@@ -189,7 +189,10 @@ const Dashboard = () => {
 
     return (
         <>
-            <Navbar />
+            <div className="py-5">
+                <Navbar />
+
+            </div>
 
             <div className="mx-auto p-10 flex items-center justify-center flex-col sm:flex-row flex-wrap gap-6 bg-[#f5f5f5]">
                 <Chart type="line" data={dataGraphLine && dataGraphLine} title="Transactions mined"/>
