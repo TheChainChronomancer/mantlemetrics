@@ -63,7 +63,7 @@ const Chart = ({type, data, title}) => {
     return (
         <div className="flex flex-col items-center">
         <h2 className="py-2 font-semibold bg-[#cad6eb] drop-shadow-md sm:w-[35vw] w-[80vw] text-center text-gray-600 rounded-t-lg">{title}</h2>
-        <div className="p-4 py-10 rounded-b-lg bg-white drop-shadow-md sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh] text-[12px] flex">
+        <div className="p-4 hover:drop-shadow-xl rounded-b-lg bg-white drop-shadow-md sm:w-[35vw] sm:h-[20vw] w-[80vw] h-[40vh] text-[12px] flex">
             {(!data || data?.length < 1) && ( <Loader /> )}
             {type === "line" && data && data.length > 1 && (
                 <ResponsiveContainer>
